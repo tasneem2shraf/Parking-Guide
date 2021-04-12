@@ -11,9 +11,9 @@ class Comment extends Model
 
 
     protected $fillable = [
-        'id','user_id',  'garage_id', 'comment'
+        'user_id',  'garage_id', 'comment'
      ];
- 
+
      /**
       * The attributes that should be cast.
       *
@@ -23,11 +23,11 @@ class Comment extends Model
          'created_at' => 'datetime:Y-m-d',
          'updated_at' => 'datetime:Y-m-d',
      ];
- 
+
      public function User(){
          return $this->belongsTo('App\Models\User');
      }
- 
+
      public function garage() {
          return $this->belongsTo(Garage::class);
      }

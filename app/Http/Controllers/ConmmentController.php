@@ -7,59 +7,57 @@ use App\Models\Comment;
 use App\Models\User;
 use App\Models\Garage;
 use App\Traits\GeneralTrait;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use JWTAuth;
 
 
 class ConmmentController extends Controller
 {
-    protected $user;
- 
+    // protected $user;
+
     public function __construct()
     {
-        $this->user = JWTAuth::parseToken()->authenticate();
+        $this->middleware('auth:api');
+        // $this->user = JWTAuth::parseToken()->authenticate();
     }
-    
+
     // now i can see a garage comments not auth
     // using function:comments /in model Garage
     public function index($garage_id)
-    { 
-    
-      return Garage::find($garage_id)->comments;
+    {
+
+        return Garage::find($garage_id)->comments;
     }
-   
-    // get a comment by auth 
+
+    // get a comment by auth
     public function show($id)
     {
 
         $comment = Comment::find($id);
-        if ($comment->user_id !==  auth()->id()){
+        if ($comment->user_id !==  auth()->id()) {
             abort(403);
-        }
-        else {
+        } else {
             return response()->json([
                 $comment
             ], 200);
         }
-
     }
 
     public function store(Request $request)
     {
-       
-        $val = request()->validate([ 
-          //  'id' => 'required',//id outo increament 
+
+        $val = request()->validate([
+            //  'id' => 'required',//id outo increament
             'garage_id' => 'required',
             'comment' => 'required',
-            
-            
         ]);
         $comment = Comment::create(array_merge($val, ['user_id' => $request->user()->id]));
-    
-        if($comment) {
+
+        if ($comment) {
             return response()->json([
                 'success' => true,
-                'Comment' => $comment    
+                'Comment' => $comment
             ]);
         } else {
             return response()->json([
@@ -67,55 +65,60 @@ class ConmmentController extends Controller
                 'message' => 'Sorry, comment could not be added'
             ], 500);
         }
-        }
-
-
-        public function update(Request $request, $id )//comment id
-        {
-           
-    
-                $comment = Comment::find($id );
-                
-                if ($comment->user_id !==  auth()->id()){
-                    abort(403);
-                } else {
-                    $comment -> comment = $request -> comment;
-                
-                if ($comment -> update()) 
-                {
-                    return response() -> json(['status' => 'success']);
-                } else {
-                    return response() -> json(['status' => 'can not be updated']);
-                }
-        }  
-
-            
     }
 
-    public function destroy( $id)
+
+    public function update(Request $request, $id) //comment id
     {
-     
-        $comment = Comment::find($id);
-    
-        if ($comment->user_id !==  auth()->id()){
+
+
+        try {
+
+            $comment = Comment::find($id);
+        } catch (ModelNotFoundException $_) {
+            return $this->errorJson('the request not founded', 404);
+        }
+
+        if ($comment->user_id !==  auth()->id()) {
             abort(403);
         } else {
-            if ($comment -> delete()) 
-            {
-                return response() -> json(['status' => 'success']);
+            $comment->comment = $request->comment;
+
+            if ($comment->update()) {
+                return response()->json(['status' => 'success']);
             } else {
-                return response() -> json(['status' => 'can not be updated']);
+                return response()->json(['status' => 'can not be updated']);
             }
         }
-        
     }
-    
+
+    public function destroy($id)
+    {
+
+        try {
+
+            $comment = Comment::find($id);
+        } catch (ModelNotFoundException $_) {
+            return $this->errorJson('the request not founded', 404);
+        }
+
+        if ($comment->user_id !==  auth()->id()) {
+            abort(403);
+        } else {
+            if ($comment->delete()) {
+                return response()->json(['status' => 'success']);
+            } else {
+                return response()->json(['status' => 'can not be updated']);
+            }
+        }
+    }
+
 
     public function comment_of_garage($request)
     {
         return [
             'Comment' => $this->comment,
-            
+
         ];
     }
 }

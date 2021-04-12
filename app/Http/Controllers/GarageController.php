@@ -24,43 +24,43 @@ class GarageController extends Controller
 
     public function __construct()
     {
-        $this->middleware( ['owner'], ['except'=>['index']]);
-        $this->user = JWTAuth::parseToken()->authenticate();
+        $this->middleware(['owner'], ['except' => ['index', 'show']]);
+        // $this->user = JWTAuth::parseToken()->authenticate();
     }
-    
 
-    // retutn all garages of current user using function:get_owner_garages / in user model
+
     public function index()
-    {   
-       return User::find(auth()->id())->get_owner_garages;
-    }
-
-    // get a garage with it's comments
-    public function show_One_garage($id)
-    {   
-        
-        $garage = Garage::find($id);
-        if ($garage->owner_id !==  auth()->id()){
-            abort(403);
-        } 
-        else {
-            return Garage::find($id)->load('comments');
-        }
-        
-    }
-
-    // show all garages for any user (not the auth)
-    public function show_all_garages()
-    {   
-        return Garage::all();
-        
-    }
-
-    // show garage by id for any user (not the auth)
-    public function show_garage($id)
     {
-        return Garage::find($id);
+
+        return $this->dataJson(Garage::all());
     }
+
+
+    public function show(int $id)
+    {
+
+        return Garage::findOrFail($id)->with('comments')->get();
+    }
+    // // get a garage with it's comments
+    public function show_owner_garages()
+    {
+
+       //enter the code here
+
+
+    }
+
+    // // show all garages for any user (not the auth)
+    // public function show_all_garages()
+    // {
+    //     return Garage::all();
+    // }
+
+    // // show garage by id for any user (not the auth)
+    // public function show_garage($id)
+    // {
+    //     return Garage::find($id);
+    // }
 
 
     public function store(Request $request)
@@ -93,71 +93,80 @@ class GarageController extends Controller
     }
 
 
-   
     public function update(Request $request, $id)
     {
+        //add to make validation
+        $this->garageValidate();
 
         $garage = Garage::find($id);
         // check user is the real owner of garage
-        if ($garage->owner_id !==  auth()->id()){
-                abort(403);
-            } else
-            {
-  
-                $garage->name = $request->name;
-                $garage->city = $request->city;
-                $garage->street = $request->street;
-                $garage->b_number = $request->b_number;
-                $garage->capacity = $request->capacity;
-                $garage->lat = $request->lat;
-                $garage->long = $request->long;
-                $garage->save();
-                
-                if ($garage->update()) {
-                    return response()->json(['status' => 'success']);
-                } else {
-                    return response()->json(['status' => 'can not be updated']);
-                }
-              }
-        
-    }
-
-    public function destroy( $id)
-    {
-    
-        $garage = Garage::find($id);
-
-        if ($garage->owner_id !==  auth()->id()){
+        if ($garage->owner_id !==  auth()->id()) {
             abort(403);
-        } 
-        else {
-            if ($garage -> delete()) 
-            {
-                return response() -> json(['status' => 'success']);
+        } else {
+
+            $garage->name = $request->name;
+            $garage->city = $request->city;
+            $garage->street = $request->street;
+            $garage->b_number = $request->b_number;
+            $garage->capacity = $request->capacity;
+            $garage->lat = $request->lat;
+            $garage->long = $request->long;
+            $garage->save();
+
+            if ($garage->update()) {
+                return response()->json(['status' => 'success']);
             } else {
-                return response() -> json(['status' => 'can not be updated']);
+                return response()->json(['status' => 'can not be updated']);
             }
         }
-
-
-        
     }
 
-    // find the garage{id} , it's requests : requestcars.  and filter : status=10
-    public function get_garage_active_requests($id) {
-        $garage = Garage::find($id);
-        if ($garage->owner_id !==  auth()->id()){
+    public function destroy($id)
+    {
+
+        //find or fail. to make failer if the id didn't founded
+        $garage = Garage::findOrFail($id);
+
+        if ($garage->owner_id !==  auth()->id()) {
             abort(403);
-        } else  {
-            return Garage::where('id', $id)->with(['requestcars' => function($query) {
-                $query->where('status', 10);
-            }])->first(); }
+        } else {
+            if ($garage->delete()) {
+                return response()->json(['status' => 'success']);
+            } else {
+                return response()->json(['status' => 'can not be updated']);
+            }
+        }
     }
-  
 
+
+    // find the status = 10 or check camera not done
+    // find the garage{id} , it's requests : requestcars.  and filter : status=10
+    public function get_garage_active_requests($id)
+    {
+        $garage = Garage::find($id);
+        if ($garage->owner_id !==  auth()->id()) {
+            abort(403);
+        } else {
+            return Garage::where('id', $id)->with(['requestcars' => function ($query) {
+                $query->where('status', 10);
+            }])->first();
+        }
+    }
+
+
+    /**
+     * @return array
+     */
+    public function garageValidate()
+    {
+        return request()->validate([
+            'city' => 'required',
+            'street' => 'required',
+            'b_number' => 'required|int',
+            'capacity' => 'required|int',
+            'name' => 'required',
+            "lat" => 'required',
+            "long" => 'required'
+        ]);
+    }
 }
-
-
-
-
-

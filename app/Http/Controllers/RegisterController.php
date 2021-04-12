@@ -37,8 +37,7 @@ class RegisterController extends Controller
         $uid = $verify->getClaim('sub');
         $phone = $auth->getUser($uid)->phoneNumber;
 
-        echo $uid;
-        echo $phone;
+
 
         $user = User::create(array_merge($validator, ['password' => bcrypt($validator['password']), 'id' => $uid, 'phone' => $phone]));
         $token = Auth::fromUser($user);
