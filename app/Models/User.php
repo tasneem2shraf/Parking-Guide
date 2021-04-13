@@ -66,11 +66,18 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    
+
     public function garage_reviews()
     {
         return $this->belongsToMany(Garage::class, 'reviews', 'user_id', 'garage_id')
             ->withPivot('review')
             ->withTimestamps();
     }
+
+    /* retutn all garages of current user using  function : index in GarageController*/
+    function get_owner_garages (){
+
+        return $this->hasMany('App\Models\Garage');
+    }
+    
 }

@@ -41,14 +41,17 @@ class GarageController extends Controller
 
         return Garage::findOrFail($id)->with('comments')->get();
     }
-    // // get a garage with it's comments
+
+
+    // retutn all garages of current user using function:get_owner_garages / in user model
     public function show_owner_garages()
-    {
+      {
 
-       //enter the code here
+         //enter the code her
+          return User::find(auth()->id())->get_owner_garages;
 
 
-    }
+      }
 
     // // show all garages for any user (not the auth)
     // public function show_all_garages()
