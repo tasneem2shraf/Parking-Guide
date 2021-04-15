@@ -38,8 +38,8 @@ Route::group([], function () {
     Route::resource('histories', (App\Http\Controllers\HistoryController::class));
 });
 
+Route::get('owner/garages', [App\Http\Controllers\GarageController::class,'show_owner_garages']);
 // for auth owners
-Route::get('garages/owner/', [App\Http\Controllers\GarageController::class,'show_owner_garages']);
 
 // get garage with its active requests where statue = 10
 Route::get('garage/{id}/requests', [App\Http\Controllers\GarageController::class,'get_garage_active_requests']);

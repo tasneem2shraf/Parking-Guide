@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\HelperMethods\JsonReturn;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    use JsonReturn;
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
@@ -16,11 +18,21 @@ class AuthController extends Controller
 
     public function login()
     {
+        $val = request()->validate([
+            'is_owner' => 'required|bool'
+        ]);
+
         $credentials = request(['phone', 'password']);
         if (!$token = Auth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->respondWithToken($token);
+
+        if(Auth::user()->is_owner || (Auth::user()->is_owner == $val['is_owner'])){
+
+            return $this->respondWithToken($token);
+        }else{
+            return $this->errorJson('You not have a permision');
+        }
     }
 
     public function me()
