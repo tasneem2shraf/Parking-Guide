@@ -20,7 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group([
-//      'middleware' => 'api',
     'prefix' => 'auth',
 
 ], function () {
@@ -39,28 +38,20 @@ Route::group([], function () {
     Route::resource('histories', (App\Http\Controllers\HistoryController::class));
 });
 
-
-
 // for auth owners
 Route::get('garages/owner/', [App\Http\Controllers\GarageController::class,'show_owner_garages']);
-
 
 // get garage with its active requests where statue = 10
 Route::get('garage/{id}/requests', [App\Http\Controllers\GarageController::class,'get_garage_active_requests']);
 
-
-
-
 //comments
-
 Route::post('comments/add/', [App\Http\Controllers\ConmmentController::class,'store']);
 Route::put('comments/{id}/update/', [App\Http\Controllers\ConmmentController::class,'update']);
 Route::get('comments/{id}/show/', [App\Http\Controllers\ConmmentController::class,'show']);// get a comment by auth
 Route::delete('commentdestroy/{id}/', [App\Http\Controllers\ConmmentController::class,'destroy']);
+
 //not auth
 Route::get('commentindex/{garage_id}/', [App\Http\Controllers\ConmmentController::class,'index']);
-
-
 
 //request
 Route::post('request/add/', [App\Http\Controllers\RequestcarController::class,'store']);

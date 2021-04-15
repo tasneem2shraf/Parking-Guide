@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\HelperMethods\JsonReturn;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Firebase\Auth\Token\Exception\InvalidToken;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
+    use JsonReturn;
     public function register(Request $request)
     {
         $auth = app('firebase.auth');
@@ -37,8 +39,9 @@ class RegisterController extends Controller
         $uid = $verify->getClaim('sub');
         $phone = $auth->getUser($uid)->phoneNumber;
 
-
-
+        if(User::find($uid)){
+            return $this->errorJson('this user allready taken');
+        }
         $user = User::create(array_merge($validator, ['password' => bcrypt($validator['password']), 'id' => $uid, 'phone' => $phone]));
         $token = Auth::fromUser($user);
         return Response()->json(compact('token'));

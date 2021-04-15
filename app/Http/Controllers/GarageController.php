@@ -53,17 +53,6 @@ class GarageController extends Controller
 
       }
 
-    // // show all garages for any user (not the auth)
-    // public function show_all_garages()
-    // {
-    //     return Garage::all();
-    // }
-
-    // // show garage by id for any user (not the auth)
-    // public function show_garage($id)
-    // {
-    //     return Garage::find($id);
-    // }
 
 
     public function store(Request $request)
