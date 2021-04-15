@@ -48,7 +48,7 @@ class GarageController extends Controller
       {
 
          //enter the code her
-          return User::find(auth()->id())->get_owner_garages;
+          return $this->dataJson(User::find(auth()->id())->get_owner_garages);
 
 
       }
