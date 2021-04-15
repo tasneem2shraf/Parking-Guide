@@ -39,7 +39,7 @@ class GarageController extends Controller
     public function show(int $id)
     {
 
-        return Garage::findOrFail($id)->with('comments')->get();
+        return $this->dataJson(Garage::with('comments')->where('id', $id)->first());
     }
 
 

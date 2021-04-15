@@ -14,7 +14,7 @@ class Garage extends Model
     protected $fillable = [
         'id', 'city', 'street', 'b_number', 'capacity', 'name', 'owner_id', 'lat', 'long'
     ];
-    
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',
@@ -37,7 +37,7 @@ class Garage extends Model
 // retutn all comments of user garage using function : index() in ConmmentController
 function comments(){
 
-    return $this->hasMany('App\Models\Comment', 'garage_id');
+    return $this->hasMany('App\Models\Comment',  'garage_id', 'id');
 }
 
 // retutn all Requests of user garage using function : index() in RequestcarController

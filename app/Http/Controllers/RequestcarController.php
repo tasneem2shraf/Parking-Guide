@@ -30,11 +30,10 @@ class RequestcarController extends Controller
     //return reqests of a garage using function:requestcars /in model Garage
     public function index($garage_id)
     {
-        try{
+        try {
 
             return Garage::findOrFail($garage_id)->requestcars;
-
-        }catch(ModelNotFoundException $_){
+        } catch (ModelNotFoundException $_) {
             return $this->errorJson('the request not founded', 404);
         }
     }
@@ -100,6 +99,12 @@ class RequestcarController extends Controller
             return $this->errorJson('the request not founded', 404);
         }
 
+        //if allready ended show to the user
+        if ($requestcar->status == 20) {
+            return $this->dataJson('This is already End');
+        } else if ($requestcar->status == 30) { //if cancled ended show to the user
+            return $this->dataJson('This cancled request');
+        }
         if ($requestcar->user_id !== auth()->id()) {
             abort(403);
         } else {
@@ -115,13 +120,13 @@ class RequestcarController extends Controller
     }
 
     // canceled request : put statues = 30
-    public function canceled(Request $request, $id)
+    public function canceled( $id)
     {
 
-        try{
+        try {
 
-            $requestcar = Requestcar::find($id);
-        }catch(ModelNotFoundException $_){
+            $requestcar = Requestcar::findOrFail($id);
+        } catch (ModelNotFoundException $_) {
             return $this->errorJson('the request not founded', 404);
         }
 
@@ -144,11 +149,10 @@ class RequestcarController extends Controller
     public function destroy($id)
     {
 
-        try{
+        try {
 
             $requestcar = Requestcar::find($id);
-
-        }catch(ModelNotFoundException $_){
+        } catch (ModelNotFoundException $_) {
             return $this->errorJson('the request not founded', 404);
         }
 
