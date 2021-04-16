@@ -77,7 +77,7 @@ class User extends Authenticatable implements JWTSubject
     /* retutn all garages of current user using  function : index in GarageController*/
     function get_owner_garages (){
 
-        return $this->hasMany('App\Models\Garage','id', 'owner_id');
+        return $this->hasMany('App\Models\Garage', 'owner_id');
     }
 
 }
