@@ -43,6 +43,9 @@ Route::get('garages/owner/', [App\Http\Controllers\GarageController::class,'show
 
 // get garage with its active requests where statue = 10
 Route::get('garage/{id}/requests', [App\Http\Controllers\GarageController::class,'get_garage_active_requests']);
+//
+Route::get('search/{name}', [App\Http\Controllers\GarageController::class,'search']);//USER SEARCH FOR GARAGES by name
+Route::get('nearest_garage', [App\Http\Controllers\GarageController::class,'gat_nearest_garage']);//user get nearest garage, by lat and long 
 
 //comments
 Route::post('comments/add/', [App\Http\Controllers\ConmmentController::class,'store']);
