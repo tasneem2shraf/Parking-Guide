@@ -24,7 +24,7 @@ class GarageController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['owner'], ['except' => ['index', 'show']]);
+        $this->middleware(['owner'], ['except' => ['index', 'show', 'search', 'gat_nearest_garage']]);
         // $this->user = JWTAuth::parseToken()->authenticate();
     }
 
@@ -45,13 +45,11 @@ class GarageController extends Controller
 
     // retutn all garages of current user using function:get_owner_garages / in user model
     public function show_owner_garages()
-      {
+    {
 
-         //enter the code her
-          return $this->dataJson(User::find(auth()->id())->get_owner_garages);
-
-
-      }
+        //enter the code her
+        return $this->dataJson(User::find(auth()->id())->get_owner_garages);
+    }
 
 
 
@@ -145,6 +143,50 @@ class GarageController extends Controller
         }
     }
 
+    //USER SEARCH FOR GARAGES by name
+    public function search($name)
+    {
+        $garages = Garage::where("name", "like", "%" . $name . "%")->get();
+
+        if ($garages->first()) {
+            return $garages;
+        } else {
+            return response()->json([
+                'success' => 'success',
+                'message' => 'Sorry,Can not find garage with this name'
+            ], 200);
+        }
+    }
+
+
+
+    // user get nearest garage, by lat and long
+    public function gat_nearest_garage(Request $request)
+    {
+        //$lat = 30.177901;
+        // $lon = 31.216075;
+        $lat = $request->input('lat');
+        $long = $request->input('long');
+
+        $locations = DB::table("garages")->select(
+            "id",
+            "name",
+            "price",
+            "lat",
+            "long",
+            
+            DB::raw("6371 * acos(cos(radians(" . $lat . "))
+                * cos(radians(garages.lat))
+                * cos(radians(garages.long) - radians(" . $long . "))
+                + sin(radians(" . $lat .  "))
+                * sin(radians(garages.lat))) AS distance")
+        )
+            ->orderBy('distance', 'asc')->get();
+
+        return response()->json([
+            'locations' => $locations,
+        ], 200);
+    }
 
     /**
      * @return array

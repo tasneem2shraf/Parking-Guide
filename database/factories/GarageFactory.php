@@ -28,7 +28,7 @@ class GarageFactory extends Factory
             'b_number' => $this->faker->buildingNumber,
             'capacity' => $this->faker->numberBetween(2, 200),
             'name' => $this->faker->company,
-            'lat' => 30 + rand(033333, 599988)/1000000.0,
+            'lat' =>  30 + rand(033333, 599988)/1000000.0,
             'long' => 31 + rand(233334, 400024)/1000000.0,
             'owner_id' => User::factory()->create(['is_owner' => 1])->id
         ];
