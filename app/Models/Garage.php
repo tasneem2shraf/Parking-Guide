@@ -12,7 +12,7 @@ class Garage extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'city', 'street', 'b_number', 'capacity', 'name', 'owner_id', 'lat', 'long'
+        'id', 'city', 'street', 'b_number', 'capacity', 'name', 'owner_id', 'lat', 'long',"price"
     ];
 
     protected $casts = [
