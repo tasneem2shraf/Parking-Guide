@@ -174,7 +174,7 @@ class GarageController extends Controller
             "price",
             "lat",
             "long",
-            
+            'city', 'street', 'b_number', 'capacity',
             DB::raw("6371 * acos(cos(radians(" . $lat . "))
                 * cos(radians(garages.lat))
                 * cos(radians(garages.long) - radians(" . $long . "))

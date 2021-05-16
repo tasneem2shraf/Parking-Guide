@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\HelperMethods\JsonReturn;
 use App\Models\Garage;
 use App\Models\History;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,16 +16,12 @@ class HistoryController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $validator = Validator::make($input, [
+        $validator = request()->validate( [
             'car_number' => 'required',
-            'parking_time' => 'required',
             'garage_id' => 'required',
         ]);
 
-        if ($validator->fails()) {
-            return $this->errorJson($validator->errors(), 400, 'Error Validation');
-        }
-        $histories = History::create($input);
+        $histories = History::create(array_merge($validator, ['parking_time' => date("Y-m-d H:i")]));
         return $this->dataJson($histories->toArray(), 'History created succesfully');
     }
 
