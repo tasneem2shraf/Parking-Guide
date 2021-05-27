@@ -51,5 +51,10 @@ public function user(){
     return $this->belongsTo('App\Models\User');
 }
 
+public function floors()
+{
+    return $this->hasMany(Floor::class);
+}
+
 
 }
