@@ -39,6 +39,9 @@ Route::group([], function () {
     Route::resource('floorhistories', (App\Http\Controllers\Floor_HistoryController::class));
 });
 
+//garage with comments + reviews +floors for any user
+Route::get('garages/mine/{id}/', [App\Http\Controllers\GarageController::class,'show_one_garage']); 
+
 Route::get('owner/garages', [App\Http\Controllers\GarageController::class,'show_owner_garages']);
 // for auth owners
 
@@ -69,3 +72,7 @@ Route::put('request/cancel/{id}/', [App\Http\Controllers\RequestcarController::c
 Route::delete('request/destroy/{id}/', [App\Http\Controllers\RequestcarController::class,'destroy']);
 Route::get('request/index/{id}/', [App\Http\Controllers\RequestcarController::class,'index']);
 
+//camera
+Route::post('camera', [App\Http\Controllers\CameraController::class,'store']);
+Route::get('show_camera/{id}/', [App\Http\Controllers\CameraController::class,'show']);
+Route::delete('camera_destroy/{id}/', [App\Http\Controllers\CameraController::class,'destroy']);

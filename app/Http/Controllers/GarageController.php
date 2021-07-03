@@ -43,6 +43,13 @@ class GarageController extends Controller
         return $this->dataJson(Garage::with('comments', 'floors')->where('id', $id)->first());
     }
 
+    // get one garage with it's comments, floors and reviews for any user 
+    public function show_one_garage($id)
+    {   
+        $garage = Garage::find($id);
+        return $garage->load('comments', 'floors','reviews');
+    }
+
 
     // retutn all garages of current user using function:get_owner_garages / in user model
     public function show_owner_garages()

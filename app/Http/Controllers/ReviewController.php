@@ -38,4 +38,11 @@ class ReviewController extends Controller
         // $garage->user_reviews;
         return $this->dataJson($garage->user_reviews->toArray(), 'Review show succesfully');
     }
+
+    // using function:reviews /in model Garage
+    public function index($garage_id)
+    { 
+    
+      return Review::find($garage_id)->reviews;
+    }
 }

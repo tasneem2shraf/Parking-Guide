@@ -56,5 +56,10 @@ public function floors()
     return $this->hasMany(Floor::class);
 }
 
+//retutn all reviews of user garage using function : index() in ReviewController
+function reviews(){
+
+    return $this->hasMany('App\Models\Review', 'garage_id');
+}
 
 }
