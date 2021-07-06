@@ -69,4 +69,17 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+
+
+
+    //connect to images/camera
+    //CameraController 
+    'camera' =>
+     [
+        'driver' => 'local',
+        'root' => storage_path('public/images/camera'),
+        'url' => env('APP_URL').'/storage',
+        'visibility' => 'public',
+    ],
+
 ];
