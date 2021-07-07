@@ -37,10 +37,11 @@ Route::group([], function () {
     Route::resource('reviews', (App\Http\Controllers\ReviewController::class));
     Route::resource('histories', (App\Http\Controllers\HistoryController::class));
     Route::resource('floorhistories', (App\Http\Controllers\Floor_HistoryController::class));
+    Route::resource('rectangle', (App\Http\Controllers\RectangleController::class));
 });
 
 //garage with comments + reviews +floors for any user
-Route::get('garages/mine/{id}/', [App\Http\Controllers\GarageController::class,'show_one_garage']); 
+Route::get('garages/mine/{id}/', [App\Http\Controllers\GarageController::class,'show_one_garage']);
 
 Route::get('owner/garages', [App\Http\Controllers\GarageController::class,'show_owner_garages']);
 // for auth owners
