@@ -50,7 +50,7 @@ Route::get('owner/garages', [App\Http\Controllers\GarageController::class,'show_
 Route::get('garage/{id}/requests', [App\Http\Controllers\GarageController::class,'get_garage_active_requests']);
 //
 Route::get('search/{name}', [App\Http\Controllers\GarageController::class,'search']);//USER SEARCH FOR GARAGES by name
-Route::get('nearest_garage', [App\Http\Controllers\GarageController::class,'gat_nearest_garage']);//user get nearest garage, by lat and long
+Route::get('nearest_garage', [App\Http\Controllers\GarageController::class,'get_nearest_garage']);//user get nearest garage, by lat and long
 
 //Search nearest
 Route::get('search/{name}', [App\Http\Controllers\GarageController::class,'search']);//USER SEARCH FOR GARAGES by name

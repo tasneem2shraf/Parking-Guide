@@ -40,7 +40,9 @@ class GarageController extends Controller
     public function show(int $id)
     {
 
-        return $this->dataJson(Garage::with('comments', 'floors')->where('id', $id)->first());
+        $garage = Garage::find($id);
+        return $garage->load('comments', 'floors','reviews');
+        // return $this->dataJson(Garage::with('comments', 'floors', 'reviews')->where('id', $id)->first());
     }
 
     // get one garage with it's comments, floors and reviews for any user
@@ -113,6 +115,12 @@ class GarageController extends Controller
         //add to make validation
         $this->garageValidate();
 
+          //make validation to the  Floor
+          $floorValidation = request()->validate([
+            'floorList' => 'required|array',
+            'floorList.*.number' => 'required|int',
+            'floorList.*.capacity' => 'required|int',
+        ]);
         $garage = Garage::find($id);
 
         // check user is the real owner of garage
@@ -248,7 +256,8 @@ class GarageController extends Controller
             'b_number' => 'required|int',
             'name' => 'required',
             "lat" => 'required',
-            "long" => 'required'
+            "long" => 'required',
+            "price" => 'required'
         ]);
     }
 }
