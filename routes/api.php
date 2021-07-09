@@ -54,7 +54,7 @@ Route::get('nearest_garage', [App\Http\Controllers\GarageController::class,'get_
 
 //Search nearest
 Route::get('search/{name}', [App\Http\Controllers\GarageController::class,'search']);//USER SEARCH FOR GARAGES by name
-Route::post('nearest_garage', [App\Http\Controllers\GarageController::class,'gat_nearest_garage']);//user get nearest garage, by lat and long
+Route::post('nearest_garage', [App\Http\Controllers\GarageController::class,'get_nearest_garage']);//user get nearest garage, by lat and long
 
 //comments
 Route::post('comments/add/', [App\Http\Controllers\ConmmentController::class,'store']);

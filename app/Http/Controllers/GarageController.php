@@ -25,7 +25,7 @@ class GarageController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['owner'], ['except' => ['index', 'show', 'search', 'gat_nearest_garage']]);
+        $this->middleware(['owner'], ['except' => ['index', 'show', 'search', 'get_nearest_garage']]);
         // $this->user = JWTAuth::parseToken()->authenticate();
     }
 
@@ -237,8 +237,7 @@ class GarageController extends Controller
                 * cos(radians(garages.long) - radians(" . $long . "))
                 + sin(radians(" . $lat .  "))
                 * sin(radians(garages.lat))) AS distance")
-        )
-            ->orderBy('distance', 'asc')->get();
+        )->orderBy('distance', 'asc')->get();
 
         return response()->json([
             'locations' => $locations,
