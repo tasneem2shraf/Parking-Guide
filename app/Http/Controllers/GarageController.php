@@ -43,9 +43,9 @@ class GarageController extends Controller
         return $this->dataJson(Garage::with('comments', 'floors')->where('id', $id)->first());
     }
 
-    // get one garage with it's comments, floors and reviews for any user 
+    // get one garage with it's comments, floors and reviews for any user
     public function show_one_garage($id)
-    {   
+    {
         $garage = Garage::find($id);
         return $garage->load('comments', 'floors','reviews');
     }
@@ -159,7 +159,7 @@ class GarageController extends Controller
         if ($garage->owner_id !==  auth()->id()) {
             abort(403);
         } else {
-            
+
             //delete all data in relation with garage
             $garage->floors()->delete();
             $garage->requestcars()->delete();
