@@ -3,7 +3,7 @@
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RectangleController;
+use App\Http\Controllers\RectanglesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,7 +37,7 @@ Route::group([], function () {
     Route::resource('reviews', (App\Http\Controllers\ReviewController::class));
     Route::resource('histories', (App\Http\Controllers\HistoryController::class));
     Route::resource('floorhistories', (App\Http\Controllers\Floor_HistoryController::class));
-    Route::resource('rectangle',(RectangleController::class));
+    Route::resource('rectangle',(RectanglesController::class));
 });
 
 //garage with comments + reviews +floors for any user

@@ -8,7 +8,7 @@ use App\Models\Rectangle;
 use Illuminate\Support\Facades\Validator;
 use App\HelperMethods\JsonReturn;
 
-class RectangleController extends Controller
+class RectanglesController extends Controller
 {
     use JsonReturn;
 
@@ -49,4 +49,5 @@ class RectangleController extends Controller
     {
          Rectangle::find($id)->delete();
     }
+
 }
