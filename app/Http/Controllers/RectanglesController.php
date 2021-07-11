@@ -86,7 +86,7 @@ class RectanglesController extends Controller
             $rectangle->save();
   
       return $this->dataJson($rectangle->toArray(), 'Rectangle updated succesfully');
-        }catch $e{
+        }catch (ModelNotFoundException $_){
             $this->errorJson('The rectable not founded', 404);
         }
          
