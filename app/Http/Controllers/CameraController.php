@@ -7,6 +7,7 @@ use App\Models\Floor;
 use App\Models\Camera;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
 
 
 
@@ -82,7 +83,7 @@ class CameraController extends Controller
         // $path= $folder;
         // // $image -> move($path, $file_name);
         // Storage::put($file_name, $image, 'public');
-        $path = Storage::putFile($folder, new File($image));
+        $path = Storage::disk('s3')->putFile($folder, new File($image));
         return $path;
 
     }
