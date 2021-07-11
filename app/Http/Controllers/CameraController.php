@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 use App\Traits\GeneralTrait;
 use App\Models\Floor;
 use App\Models\Camera;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
+
+
 
 class CameraController extends Controller
 {
@@ -21,7 +25,8 @@ class CameraController extends Controller
         ]);
 
         //save images/camera in database 
-        $file_name=  $this -> save_image( $request->image ,'storage/images/camera');
+        $file_name=  $this -> save_image( $request->image ,'images/camera');
+        
         $Camera = Camera::create
         ([
             'image' => $file_name,
@@ -73,9 +78,12 @@ class CameraController extends Controller
     {
         $file_extension =  $image ->getClientOriginalExtension();
         $file_name=  $folder .'/'.time().'.'.$file_extension;
-        $path= $folder;
-        $image -> move($path, $file_name);
-        return $file_name;
+        // $image = file_get_contents($image);
+        // $path= $folder;
+        // // $image -> move($path, $file_name);
+        // Storage::put($file_name, $image, 'public');
+        $path = Storage::putFile($folder, new File($image));
+        return $path;
 
     }
 
