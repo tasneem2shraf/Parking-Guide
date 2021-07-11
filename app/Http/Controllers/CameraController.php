@@ -80,11 +80,22 @@ class CameraController extends Controller
         $file_extension =  $image ->getClientOriginalExtension();
         $file_name=  $folder .'/'.time().'.'.$file_extension;
         // $image = file_get_contents($image);
-        // $path= $folder;
         // // $image -> move($path, $file_name);
         // Storage::put($file_name, $image, 'public');
-        $path = Storage::disk('s3')->putFile($folder, new File($image));
-        return $path;
+        // $path = Storage::disk('local')->putFile($folder, new File($image));
+        $uploadedObject = app('firebase.storage')->getBucket()->upload(fopen($image, 'r'), ['name' => $file_name]); 
+        // print($image);
+        $url = 'https://firebasestorage.googleapis.com/v0/b/mydatabase-6107e.appspot.com/o/'.urlencode($file_name).'?alt=media';
+
+        
+        // $expiresAt = new \DateTime('tomorrow');  
+        // $imageReference = app('firebase.storage')->getBucket()->object($file_name);  
+        // if($imageReference->exists())  
+        //   $image = $imageReference->signedUrl($expiresAt);  
+
+        // $image = $uploadedObject->signedUrl($expiresAt);
+        // print($image)
+        return $url;
 
     }
 
