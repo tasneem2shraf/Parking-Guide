@@ -78,3 +78,7 @@ Route::get('request/index/{id}/', [App\Http\Controllers\RequestcarController::cl
 Route::post('camera', [App\Http\Controllers\CameraController::class,'store']);
 Route::get('show_camera/{id}/', [App\Http\Controllers\CameraController::class,'show']);
 Route::delete('camera_destroy/{id}/', [App\Http\Controllers\CameraController::class,'destroy']);
+
+
+
+Route::post('cahgneAvail/{id}/', [App\Http\Controllers\RectanglesController::class,'changeRectanglesAvail']);

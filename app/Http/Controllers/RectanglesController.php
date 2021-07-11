@@ -44,6 +44,53 @@ class RectanglesController extends Controller
         return $this->dataJson($camera->rectangles->toArray(), 'Rectangles show succesfully');
     }
 
+    
+    public function update(Request $request ,$id)
+    {
+              $rectangle = Rectangle::find($id);
+              $input = $request->all();
+              $validator = Validator::make($input, [
+                 'x1' => 'required|int',
+                 'y1' => 'required|int',
+                 'x2' => 'required|int',
+                 'y2' => 'required|int',
+                 'position' => 'required|int',
+                 'is_available' => 'required|boolean',
+             ]);
+            if ($validator->fails()) {
+                return $this->errorJson($validator->errors(), 400, 'Error Validation');
+            }
+              $rectangle->x1 = $input['x1'];
+              $rectangle->y1 = $input['y1'];
+              $rectangle->x2 = $input['x2'];
+              $rectangle->y2 = $input['y2'];
+              $rectangle->position = $input['position'];
+              $rectangle->is_available = $input['is_available'];
+              $rectangle->save();
+    
+        return $this->dataJson($rectangle->toArray(), 'Rectangle updated succesfully');
+    }
+
+    public function changeRectanglesAvail(Request $request ,$id)
+    {
+        try{
+            
+            $rectangle = Rectangle::findOrFail($id);
+            $input = $request->all();
+            $validator = request()->validate([
+      
+               'is_available' => 'required|boolean',
+           ]);
+          
+            $rectangle->is_available = $input['is_available'];
+            $rectangle->save();
+  
+      return $this->dataJson($rectangle->toArray(), 'Rectangle updated succesfully');
+        }catch $e{
+            $this->errorJson('The rectable not founded', 404);
+        }
+         
+    }
 
     public function destroy($id)
     {
