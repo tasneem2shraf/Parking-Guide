@@ -21,7 +21,7 @@ class CameraController extends Controller
         ]);
 
         //save images/camera in database 
-        $file_name=  $this -> save_image( $request->image ,'images/camera');
+        $file_name=  $this -> save_image( $request->image ,'storage/images/camera');
         $Camera = Camera::create
         ([
             'image' => $file_name,
