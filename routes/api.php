@@ -72,13 +72,15 @@ Route::put('request/update/{id}/', [App\Http\Controllers\RequestcarController::c
 Route::put('request/cancel/{id}/', [App\Http\Controllers\RequestcarController::class,'canceled']);
 Route::delete('request/destroy/{id}/', [App\Http\Controllers\RequestcarController::class,'destroy']);
 Route::get('request/index/{id}/', [App\Http\Controllers\RequestcarController::class,'index']);
+Route::get('request/showLastActive', [App\Http\Controllers\RequestcarController::class,'get_last_active_request']);
 
 //camera
-
 Route::post('camera', [App\Http\Controllers\CameraController::class,'store']);
 Route::get('show_camera/{id}/', [App\Http\Controllers\CameraController::class,'show']);
 Route::delete('camera_destroy/{id}/', [App\Http\Controllers\CameraController::class,'destroy']);
 
+
+Route::get('floorCameras/{id}/', [App\Http\Controllers\CameraController::class,'show_all_floor_cameras']);
 
 
 Route::post('cahgneAvail/{id}/', [App\Http\Controllers\RectanglesController::class,'changeRectanglesAvail']);

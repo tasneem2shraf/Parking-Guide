@@ -20,7 +20,7 @@ class RequestcarController extends Controller
 
     public function __construct()
     {
-        $this->middleware('owner');
+        $this->middleware(['owner', 'auth:api']);
 
         // $this->user = JWTAuth::parseToken()->authenticate();
     }
@@ -87,6 +87,21 @@ class RequestcarController extends Controller
                 'message' => 'Sorry, Car could not be added'
             ], 500);
         }
+    }
+
+    public function get_last_active_request(Request $request) {
+
+        $user_id = Auth::guard('api')->id();
+
+        $request = Requestcar::where('user_id', $user_id)->where('status', 10)->orderBy('time_start', 'desc')->first();
+
+        $garage = Garage::find($request->garage_id)->first();
+        // print($garage);
+
+        $request = array_merge($request->toArray(), $garage->toArray());
+
+        return $this->dataJson($request);
+
     }
 
 
@@ -166,4 +181,6 @@ class RequestcarController extends Controller
             }
         }
     }
+
+
 }
