@@ -27,7 +27,9 @@ class ConmmentController extends Controller
     public function index($garage_id)
     {
 
-        return Garage::find($garage_id)->comments;
+        return Comment::where('garage_id', $garage_id)->with('User')->get();
+
+        // return Garage::where('id', $garage_id)->with(['comments', 'comments.User'])->get();
     }
 
     // get a comment by auth
