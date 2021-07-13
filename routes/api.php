@@ -73,6 +73,7 @@ Route::put('request/cancel/{id}/', [App\Http\Controllers\RequestcarController::c
 Route::delete('request/destroy/{id}/', [App\Http\Controllers\RequestcarController::class,'destroy']);
 Route::get('request/index/{id}/', [App\Http\Controllers\RequestcarController::class,'index']);
 Route::get('request/showLastActive', [App\Http\Controllers\RequestcarController::class,'get_last_active_request']);
+Route::get('request/showAll', [App\Http\Controllers\RequestcarController::class,'all_user_requests']);
 
 //camera
 Route::post('camera', [App\Http\Controllers\CameraController::class,'store']);

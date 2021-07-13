@@ -38,6 +38,9 @@ class RequestcarController extends Controller
         }
     }
 
+    public function all_user_requests(){
+        return $this->dataJson(Requestcar::where('user_id', Auth()->id())->orderBy('time_start', 'desc')->get());
+    }
     // get a request by auth
 
     public function show($id)
