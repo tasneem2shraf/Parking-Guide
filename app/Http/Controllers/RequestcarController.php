@@ -97,6 +97,28 @@ class RequestcarController extends Controller
 
         $garage = Garage::find($request->garage_id)->first();
         // print($garage);
+        $sum = 0;
+        $total=0;
+
+        foreach($garage->floors as $floor)
+        {
+            $sum += $floor->capacity;
+            $newfloor= $floor->load('cameras');
+
+            foreach($newfloor->cameras as $camera)
+                {
+                    $newregtangle = $camera->load('rectangles');
+                    foreach($newregtangle->rectangles as $rectangle)
+                    {
+                        if($rectangle-> is_available == 1){
+                            $total =  $total+1;
+                        }
+                    }
+                }
+        }
+
+      $garage["capacity"] = $sum;
+      $garage["free_places"] = $total;
 
         $request = array_merge($request->toArray(), $garage->toArray());
 

@@ -12,7 +12,9 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\ConmmentController;
+use App\Models\Camera;
 use App\Models\Floor;
+use App\Models\Rectangle;
 use JWTAuth;
 
 
@@ -41,15 +43,64 @@ class GarageController extends Controller
     {
 
         $garage = Garage::find($id);
-        return $garage->load('comments', 'floors','reviews');
-        // return $this->dataJson(Garage::with('comments', 'floors', 'reviews')->where('id', $id)->first());
+        // return $garage->load('comments', 'floors','reviews');
+        $floor = $garage->load('floors','comments','reviews');
+        $sum=0;
+        $total=0;
+
+        foreach($garage->floors as $floor)
+        {
+            $sum += $floor->capacity;
+            // $newfloor= Camera::where('floor_id', $floor->id);
+            $newfloor= $floor->load('cameras');
+
+            foreach($newfloor->cameras as $camera)
+                {
+                    // $newregtangle = Rectangle::where('camera_id', $camera->id)->get();
+                    $newregtangle = $camera->load('rectangles');
+                    foreach($newregtangle->rectangles as $rectangle)
+                    {
+                        if($rectangle-> is_available == 1){
+                            $total =  $total+1;
+                        }
+                    }
+                }
+        }
+
+      $garage["capacity"] = $sum;
+      $garage["free_places"] = $total;
+      return $garage;
     }
 
     // get one garage with it's comments, floors and reviews for any user
     public function show_one_garage($id)
     {
         $garage = Garage::find($id);
-        return $garage->load('comments', 'floors','reviews');
+        // return $garage->load('comments', 'floors','reviews');
+        $floor = $garage->load('floors','comments','reviews');
+        $sum=0;
+        $total=0;
+
+        foreach($garage->floors as $floor)
+        {
+            $sum += $floor->capacity;
+            $newfloor= $floor->load('cameras');
+
+            foreach($newfloor->cameras as $camera)
+                {
+                    $newregtangle = $camera->load('rectangles');
+                    foreach($newregtangle->rectangles as $rectangle)
+                    {
+                        if($rectangle-> is_available == 1){
+                            $total =  $total+1;
+                        }
+                    }
+                }
+        }
+
+      $garage["capacity"] = $sum;
+      $garage["free_places"] = $total;
+      return $garage;
     }
 
 

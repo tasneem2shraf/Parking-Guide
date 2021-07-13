@@ -22,4 +22,9 @@ class Floor extends Model
     {
         return $this->hasMany(Floorhistory::class);
     }
+
+    public function cameras()
+    {
+        return $this->hasMany(Camera::class);
+    }
 }

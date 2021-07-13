@@ -7,6 +7,7 @@ use App\Models\Camera;
 use App\Models\Rectangle;
 use Illuminate\Support\Facades\Validator;
 use App\HelperMethods\JsonReturn;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RectanglesController extends Controller
 {
@@ -30,8 +31,28 @@ class RectanglesController extends Controller
              'camera_id' => 'required',
          ]);
 
+        try{
+            Camera::findOrFail($validator['camera_id']);
+        }catch(ModelNotFoundException $e){
+            return $this->errorJson('No model found camera_id');
+        }
+
+         $rect = Rectangle::where('camera_id', $validator['camera_id'])->where('position', $validator['position'])->first();
+         print($validator['position']);
+        //  return;
+
+         if($rect){
+            $rect->x1 = $validator['x1'];
+            $rect->x2 = $validator['x2'];
+            $rect->y1 = $validator['y1'];
+            $rect->y2 = $validator['y2'];
+            $rect->is_available = $validator['is_available'];
+            $rect->save();
+            return $this->dataJson($rect->toArray(), 'Rectangle created succesfully');
+         }else{
          $rectangles = Rectangle::create($validator);
          return $this->dataJson($rectangles->toArray(), 'Rectangle created succesfully');
+        }
      }
 
 
@@ -44,7 +65,7 @@ class RectanglesController extends Controller
         return $this->dataJson($camera->rectangles->toArray(), 'Rectangles show succesfully');
     }
 
-    
+
     public function update(Request $request ,$id)
     {
               $rectangle = Rectangle::find($id);
@@ -67,29 +88,29 @@ class RectanglesController extends Controller
               $rectangle->position = $input['position'];
               $rectangle->is_available = $input['is_available'];
               $rectangle->save();
-    
+
         return $this->dataJson($rectangle->toArray(), 'Rectangle updated succesfully');
     }
 
     public function changeRectanglesAvail(Request $request ,$id)
     {
         try{
-            
+
             $rectangle = Rectangle::findOrFail($id);
             $input = $request->all();
             $validator = request()->validate([
-      
+
                'is_available' => 'required|boolean',
            ]);
-          
+
             $rectangle->is_available = $input['is_available'];
             $rectangle->save();
-  
+
       return $this->dataJson($rectangle->toArray(), 'Rectangle updated succesfully');
         }catch (ModelNotFoundException $_){
             $this->errorJson('The rectable not founded', 404);
         }
-         
+
     }
 
     public function destroy($id)

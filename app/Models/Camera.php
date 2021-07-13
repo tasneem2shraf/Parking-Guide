@@ -13,10 +13,15 @@ class Camera extends Model
     protected $fillable = [
         'id' ,'image', 'title', 'floor_id'
      ];
-     
+
      public function rectangles()
      {
          return $this->hasMany(Rectangle::class);
+     }
+
+     public function floors()
+     {
+         return $this->belongTo(Floor::class);
      }
 
 }
